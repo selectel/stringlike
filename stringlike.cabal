@@ -19,8 +19,8 @@ Library
     Ghc-options:      -Wall -fno-warn-orphans
     Default-language: Haskell2010
     Build-depends:
-        base                       == 4.6.*
-      , bytestring                 == 0.10.*
+        base                       == 4.6.*  || == 4.5.*
+      , bytestring                 == 0.10.* || == 0.9.*
       , text                       == 0.11.*
 
     Exposed-modules:  Data.String.Like
@@ -32,8 +32,8 @@ Test-suite stringlike-tests
     Default-language: Haskell2010
 
     Build-depends:
-        base                       == 4.6.*
-      , bytestring                 == 0.10.*
+        base                       == 4.6.*  || == 4.5.*
+      , bytestring                 == 0.10.* || == 0.9.*
       , text                       == 0.11.*
       , test-framework             == 0.8.*
       , test-framework-quickcheck2 == 0.3.*

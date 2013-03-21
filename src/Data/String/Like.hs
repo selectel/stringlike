@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE CPP #-}
 
 -- This module provides two type classes: 'StringLike' and 'ToString' and
 -- helper functions.
@@ -110,7 +111,7 @@ instance StringLike LB.ByteString where
     fromLazyText = LT.encodeUtf8
 
 instance StringLike SB.ByteString where
-    fromLazyText = SB.concat . LB.toChunks . fromLazyText
+    fromLazyText = lazyByteStringToStrict . fromLazyText
 
 instance ToString Int where
     toText = toLazyText . decimal
@@ -165,3 +166,14 @@ instance ToString SB.ByteString where
 
 instance ToString LB.ByteString where
     toText = LT.decodeUtf8
+
+-------------------------------------------------------------------------------
+-- * Utils
+
+lazyByteStringToStrict :: LB.ByteString -> SB.ByteString
+#if MIN_VERSION_bytestring(0, 10, 0)
+lazyByteStringToStrict = LB.toStrict
+#else
+lazyByteStringToStrict = SB.concat . LB.toChunks
+#endif
+{-# INLINE lazyByteStringToStrict #-}
