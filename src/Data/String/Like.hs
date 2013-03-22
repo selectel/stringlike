@@ -42,9 +42,6 @@ module Data.String.Like
     , string
     , text, ltext
     , bs, lbs
-    , readFile
-    , writeFile
-    , appendFile
     ) where
 
 import Data.Int (Int8, Int16, Int32, Int64)
