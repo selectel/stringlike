@@ -6,12 +6,12 @@
 -- helper functions.
 --
 -- Type class 'StringLike' used for defining any string like
--- type that can be obtained via lazy 'LT.Text'. There are default
--- implementations for lazy 'LT.Text', strict 'ST.Text', lazy 'LB.ByteString'
--- and strict 'SB.ByteString'.
+-- type that can be obtained via lazy 'LazyText'. There are default
+-- implementations for lazy 'LazyText', strict 'StrictText', lazy 'LazyByteString'
+-- and strict 'StrictByteString'.
 --
 -- Type class 'ToString' used for defining a way to convert any type to
--- lazy 'LT.Text'.
+-- lazy 'LazyText'.
 --
 -- For example:
 --
@@ -44,6 +44,8 @@ module Data.String.Like
     , bs, lbs
     ) where
 
+import Prelude hiding (length)
+
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import qualified Data.ByteString as SB
@@ -57,37 +59,42 @@ import qualified Data.Text.Lazy.Encoding as LT
 import qualified Data.Text as ST
 import qualified Data.Text.Encoding as ST
 
+type StrictText = ST.Text
+type LazyText = LT.Text
+type StrictByteString = SB.ByteString
+type LazyByteString = LB.ByteString
+
 -------------------------------------------------------------------------------
 -- * Type classes
 
 -- | This type class can be used to transform any string like from
--- lazy 'LT.Text', there is no default implementation for 'String' consciously,
+-- lazy 'LazyText', there is no default implementation for 'String' consciously,
 -- beacause we don't want to incite 'String' using.
 class StringLike a where
-    fromLazyText :: LT.Text -> a
+    fromLazyText :: LazyText -> a
 
 -- | This type class can be used to transform any type to 'StringLike' type.
 -- Minimal complete definition: 'toText'.
 class ToString a where
-    toText :: a -> LT.Text
+    toText :: a -> LazyText
 
 -------------------------------------------------------------------------------
 -- * Utilities
 
--- | Transform any 'ToString' type to strict 'ST.Text'
-text :: ToString a => a -> ST.Text
+-- | Transform any 'ToString' type to strict 'StrictText'
+text :: ToString a => a -> StrictText
 text = string
 
--- | Transform any 'ToString' type to lazy 'LT.Text'
-ltext :: ToString a => a -> LT.Text
+-- | Transform any 'ToString' type to lazy 'LazyText'
+ltext :: ToString a => a -> LazyText
 ltext = string
 
--- | Transform any 'ToString' type to strict 'SB.ByteString'
-bs :: ToString a => a -> SB.ByteString
+-- | Transform any 'ToString' type to strict 'StrictByteString'
+bs :: ToString a => a -> StrictByteString
 bs = string
 
--- | Transform any 'ToString' type to lazy 'LB.ByteString'
-lbs :: ToString a => a -> LB.ByteString
+-- | Transform any 'ToString' type to lazy 'LazyByteString'
+lbs :: ToString a => a -> LazyByteString
 lbs = string
 
 -- | Transform any 'ToString' type to any 'StringLike' type, it can be inferred
@@ -98,16 +105,16 @@ string = fromLazyText . toText
 -------------------------------------------------------------------------------
 -- * Instances
 
-instance StringLike ST.Text where
+instance StringLike StrictText where
     fromLazyText = LT.toStrict
 
-instance StringLike LT.Text where
+instance StringLike LazyText where
     fromLazyText = id
 
-instance StringLike LB.ByteString where
+instance StringLike LazyByteString where
     fromLazyText = LT.encodeUtf8
 
-instance StringLike SB.ByteString where
+instance StringLike StrictByteString where
     fromLazyText = lazyByteStringToStrict . fromLazyText
 
 instance ToString Int where
@@ -152,22 +159,22 @@ instance ToString Float where
 instance ToString String where
     toText = LT.pack
 
-instance ToString LT.Text where
+instance ToString LazyText where
     toText = id
 
-instance ToString ST.Text where
+instance ToString StrictText where
     toText = LT.fromStrict
 
-instance ToString SB.ByteString where
+instance ToString StrictByteString where
     toText = LT.fromStrict . ST.decodeUtf8
 
-instance ToString LB.ByteString where
+instance ToString LazyByteString where
     toText = LT.decodeUtf8
 
 -------------------------------------------------------------------------------
--- * Utils
+-- * Internal Utils
 
-lazyByteStringToStrict :: LB.ByteString -> SB.ByteString
+lazyByteStringToStrict :: LazyByteString -> StrictByteString
 #if MIN_VERSION_bytestring(0, 10, 0)
 lazyByteStringToStrict = LB.toStrict
 #else
