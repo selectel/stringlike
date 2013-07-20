@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Stringlike by selectel</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Stringlike</h1>
+        <p>Transformations to several string-like types</p>
+
+        <p class="view"><a href="https://github.com/selectel/stringlike">View the Project on GitHub <small>selectel/stringlike</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/selectel/stringlike/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/selectel/stringlike/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/selectel/stringlike">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="stringlike-" class="anchor" href="#stringlike-"><span class="octicon octicon-link"></span></a>stringlike <a href="http://travis-ci.org/selectel/stringlike"><img src="https://secure.travis-ci.org/selectel/stringlike.png" alt="Build Status"></a>
+</h1>
+
+<p>Transformations to several string-like types.</p>
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<div class="highlight"><pre><span class="cm">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span class="kr">module</span> <span class="nn">Main</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Data.ByteString.Lazy</span>
+
+<span class="kr">data</span> <span class="kt">Foo</span> <span class="ow">=</span> <span class="kt">Bar</span> <span class="o">|</span> <span class="kt">Baz</span>
+
+<span class="kr">instance</span> <span class="kt">ToString</span> <span class="kt">Foo</span> <span class="kr">where</span>
+    <span class="n">toText</span> <span class="kt">Bar</span> <span class="ow">=</span> <span class="s">"bar"</span>
+    <span class="n">toText</span> <span class="kt">Baz</span> <span class="ow">=</span> <span class="s">"baz"</span>
+
+<span class="nf">test</span> <span class="ow">::</span> <span class="kt">ByteString</span> <span class="ow">-&gt;</span> <span class="nb">()</span>
+<span class="nf">test</span> <span class="ow">=</span> <span class="n">const</span> <span class="nb">()</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="kr">do</span>
+    <span class="n">test</span> <span class="o">$</span> <span class="n">string</span> <span class="kt">Bar</span>
+    <span class="n">test</span> <span class="o">$</span> <span class="n">lbs</span> <span class="kt">Baz</span>
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/selectel">selectel</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
